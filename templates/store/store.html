@@ -133,6 +133,28 @@
 	<div class="col-md-4">
 		<figure class="card card-product-grid">
 			<div class="img-wrap"> 
+				<img src={{product.images.url}}>
+				
+			</div> <!-- img-wrap.// -->
+			<figcaption class="info-wrap">
+				<div class="fix-height">
+					<a href={{product.get_url}} class="title">{{product.product_name}}</a>
+					<div class="price-wrap mt-2">
+						<span class="price">${{product.price}}</span>
+					</div> <!-- price-wrap.// -->
+				</div>
+				<a href={{product.get_url}}   class="btn btn-block btn-primary">View Details</a>	
+			</figcaption>
+		</figure>
+	</div> <!-- col.// -->
+
+	{% comment %} <div class="col-md-4">
+		<figure class="card card-product-grid">
+			<div class="img-wrap"> 
+				<img src="images/items/3.jpg">
+	<div class="col-md-4">
+		<figure class="card card-product-grid">
+			<div class="img-wrap"> 
 				
 				<img src={{product.images.url}}>
 				
@@ -148,19 +170,33 @@
 				<a href="#" class="btn btn-block btn-success">Added to cart </a>
 			</figcaption>
 		</figure>
-	</div> <!-- col.// -->
+	</div> <!-- col.// --> {% endcomment %}
     {% endfor %}
 </div> <!-- row end.// -->
 
 
 <nav class="mt-4" aria-label="Page navigation sample">
+	{% if products.has_other_pages %}
   <ul class="pagination">
-    <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-    <li class="page-item"><a class="page-link" href="#">2</a></li>
-    <li class="page-item"><a class="page-link" href="#">3</a></li>
-    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+	{% if products.has_previous %}
+    <li class="page-item"><a class="page-link" href="?page={{products.previous_page_number}}">Previous</a></li>
+	{% else %}
+	<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+	{% endif %}
+	{% for i in products.paginator.page_range %}
+	{% if products.number == i %}
+    <li class="page-item active"><a class="page-link" href="?page={{i}}">{{i}}</a></li> 
+	{% else %}
+    <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li> 
+	{% endif %}
+	{% endfor %}
+	{% if products.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{products.next_page_number}}">Next</a></li>
+	{% else %}
+	<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+	{% endif %}
   </ul>
+  {% endif %}
 </nav>
 
 	</main> <!-- col.// -->
