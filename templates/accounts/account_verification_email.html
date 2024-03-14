@@ -1,0 +1,16 @@
+{% autoescape off %}
+
+
+Hi {{user.first_name}},
+
+Thanks for getting started with our GreatKart!
+
+We need a little more information to complete your registration, including a confirmation of your email address.
+
+Click below to confirm your email address:
+
+http://{{domain}}{% url "activate" uidb64=uid token=token %}
+
+If you have problems, please paste the above URL into your web browser.
+
+{% endautoescape %}

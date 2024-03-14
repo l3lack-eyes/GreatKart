@@ -131,3 +131,17 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR/'media'
+
+from django.contrib.messages import constants as messages
+
+MESSAGE_TAGS = {
+    messages.ERROR: "danger"
+}
+
+DEFAULT_FROM_EMAIL = 'new@sales.metroshahed.link'
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST='smtp.c1.liara.email'
+EMAIL_PORT=587
+EMAIL_HOST_USER='ecstatic_swanson_r58cn3'
+EMAIL_HOST_PASSWORD='cc63ab67-d4fd-41a3-a017-82a8f7c37724'
+EMAIL_USE_TLS=True
