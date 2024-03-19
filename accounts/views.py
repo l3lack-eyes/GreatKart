@@ -9,6 +9,9 @@ from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
+from carts.models import Cart
+from carts.views import _cart_id,CartItem
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 def register(request):
     form = RegistrationForm(request.POST)
@@ -50,14 +53,24 @@ def login(request):
 
         user = auth.authenticate(email=email,password=password)
         if user is not None:
+            try:
+                cart = Cart.objects.get(cart_id=_cart_id(request))
+                is_cart_item_exists = CartItem.objects.filter(cart=cart).exists()
+                if is_cart_item_exists:
+                    cart_item = CartItem.objects.filter(cart=cart)
+                    for item in cart_item:
+                        item.user = user
+                        user.save()
+            except:
+                pass
             auth.login(request,user)
             messages.success(request,"You are Now logged In")
-            return redirect('home')
+            return redirect('dashboard')
         else :
             messages.error(request,'Invalid login credentials')
             return redirect('login')
     return render(request,'accounts/login.html')
-# @login_required(login_url='login')
+@login_required(login_url='login')
 def logout(request):
     auth.logout(request)
     messages.success(request, "Logged out Successfully")
@@ -78,9 +91,9 @@ def activate(request,uidb64,token):
         messages.warning(request, 'The activation link was broken or has expired. Please register again to create a new account.')
         return redirect('register')
     
-# @login_required(login_url='login')
+@login_required(login_url='login')
 def dashboard(request):
-    pass
+    return render(request,'accounts/dashboard.html')
 def forgetPassword(request):
     if request.method == 'POST':
         email = request.POST['email']
